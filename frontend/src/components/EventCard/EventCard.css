@@ -1,0 +1,12 @@
+
+.event-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 430px;
+    height: 210px;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #F2F2F2;
+    cursor: pointer;
+}

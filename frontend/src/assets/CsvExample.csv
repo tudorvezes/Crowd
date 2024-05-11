@@ -1,0 +1,3 @@
+UniqueCode,FirstName,LastName,DateOfBirth,Email,Phone,Address,Other,TicketTypeName
+672348758,TestCsV1,SCV,2002-05-01,test@example.com,7546721834,,,Basic
+939746378,TestCsV2,SCV,2002-05-01,test@example.com,7546721834,,,Premium
