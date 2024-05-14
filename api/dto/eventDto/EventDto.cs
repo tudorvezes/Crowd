@@ -14,6 +14,5 @@ public class EventDto
 	public bool Overselling { get; set; }
 	public bool ScanningState { get; set; }
 	public PermissionType YourPermission { get; set; }
-	public string EventToken { get; set; } = string.Empty;
 	public List<TicketTypeDto> TicketTypes { get; set; } = new List<TicketTypeDto>();
 }

@@ -1,4 +1,5 @@
 using api.data;
+using api.hub;
 using api.model;
 using api.repository;
 using api.service;
@@ -15,9 +16,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         corsPolicyBuilder => corsPolicyBuilder.WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
-            .AllowAnyMethod());
+            .AllowAnyMethod()
+            .AllowCredentials());
 });
 
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -88,6 +91,7 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddSingleton<NotificationHub>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
@@ -111,6 +115,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();
 

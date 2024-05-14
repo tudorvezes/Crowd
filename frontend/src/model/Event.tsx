@@ -22,7 +22,6 @@ export type LongEvent = {
     overselling: boolean;
     scanningState: boolean;
     yourPermission: PermissionType;
-    eventToken: string;
     ticketTypes: TicketType[];
 };
 

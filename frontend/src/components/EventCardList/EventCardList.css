@@ -1,0 +1,14 @@
+.event-list-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 columns with equal width */
+  gap: 1rem;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+/* This is a media query that will apply the styles inside it when the screen width is 768px or less */
+@media (max-width: 768px) {
+  .event-list-container {
+    grid-template-columns: 1fr; /* Creates 1 column with 100% width */
+  }
+}

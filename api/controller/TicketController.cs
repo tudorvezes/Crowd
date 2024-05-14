@@ -5,12 +5,14 @@ using CsvHelper;
 using api.dto.eventDto;
 using api.dto.ticketDto;
 using api.dto.fileDto;
+using api.hub;
 using api.mappers;
 using api.model;
 using api.repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace api.controller;
 
@@ -22,13 +24,15 @@ public class TicketController : ControllerBase
 	private readonly ITicketRepository _ticketRepo;
 	private readonly ITicketTypeRepository _ticketTypeRepo;
 	private readonly IPermissionRepository _permissionRepo;
+	private readonly IHubContext<NotificationHub> _hubContext;
 
-	public TicketController(UserManager<AppUser> userManager, ITicketRepository ticketRepository, IPermissionRepository permissionRepo, ITicketTypeRepository ticketTypeRepo)
+	public TicketController(UserManager<AppUser> userManager, ITicketRepository ticketRepository, IPermissionRepository permissionRepo, ITicketTypeRepository ticketTypeRepo, IHubContext<NotificationHub> hubContext)
 	{
 		_userManager = userManager;
 		_ticketRepo = ticketRepository;
 		_permissionRepo = permissionRepo;
 		_ticketTypeRepo = ticketTypeRepo;
+		_hubContext = hubContext;
 	}
 	
 	[HttpGet("{eventId:int}")]
@@ -36,12 +40,7 @@ public class TicketController : ControllerBase
 	public async Task<IActionResult> GetTickets([FromRoute] int eventId)
 	{
 		var userId = HttpContext.User?.FindFirst("userId")?.Value;
-		//var tokenEventId = HttpContext.User?.FindFirst("EventId")?.Value;
-		//if (tokenEventId != eventId.ToString())
-		//{
-		//	return Unauthorized();
-		//}
-		
+
 		if (userId != null)
 		{
 			var permission = await _permissionRepo.GetOnlyUserPermissionForEventAsync(userId, eventId);
@@ -60,11 +59,6 @@ public class TicketController : ControllerBase
 	public async Task<IActionResult> GetTicket([FromRoute] int eventId, [FromRoute] int ticketId)
 	{
 		var userId = HttpContext.User?.FindFirst("userId")?.Value;
-		//var tokenEventId = HttpContext.User?.FindFirst("EventId")?.Value;
-		//if (tokenEventId != eventId.ToString())
-		//{
-		//	return Unauthorized();
-		//}
 		
 		if (userId != null)
 		{
@@ -87,11 +81,6 @@ public class TicketController : ControllerBase
 	public async Task<IActionResult> CreateTicket([FromRoute] int eventId, [FromBody] CreateTicketDto ticketDto)
 	{
 		var userId = HttpContext.User?.FindFirst("userId")?.Value;
-		//var tokenEventId = HttpContext.User?.FindFirst("EventId")?.Value;
-		//if (tokenEventId != eventId.ToString())
-		//{
-		//	return Unauthorized();
-		//}
 		
 		// Validate ticketDto
 		if (!ModelState.IsValid)
@@ -146,6 +135,7 @@ public class TicketController : ControllerBase
 				var createdTicket = await _ticketRepo.CreateAsync(ticket);
 				if (createdTicket != null)
 				{
+					await _hubContext.Clients.Group(eventId.ToString()).SendAsync("TicketAdded", ticket.ToTicketDto());
 					return Ok(createdTicket.ToTicketDto());
 				}
 			}
@@ -158,11 +148,6 @@ public class TicketController : ControllerBase
 	public async Task<IActionResult> CreateTicketsFromCsv([FromRoute] int eventId, [FromForm] CsvFileDto csvFileDto)
 	{
 	    var userId = HttpContext.User?.FindFirst("userId")?.Value;
-		//var tokenEventId = HttpContext.User?.FindFirst("EventId")?.Value;
-	    //if (tokenEventId != eventId.ToString())
-	    //{
-	    //    return Unauthorized();
-	    //}
 
 	    if (userId == null)
 	    {
@@ -255,7 +240,10 @@ public class TicketController : ControllerBase
 			        }
 		        }
 	        }
-	        return Ok(createdTickets.Select(t => t.ToTicketDto()));
+
+	        List<TicketDto> ticketDtos = createdTickets.Select(t => t.ToTicketDto()).ToList();
+	        await _hubContext.Clients.Group(eventId.ToString()).SendAsync("TicketsAdded", ticketDtos);
+	        return Ok(ticketDtos);
 	    }
 	    catch (Exception ex)
 	    {
@@ -275,11 +263,6 @@ public class TicketController : ControllerBase
 	public async Task<IActionResult> ScanTicket([FromRoute] int eventId, [FromRoute] string ticketCode)
 	{
 		var userId = HttpContext.User?.FindFirst("userId")?.Value;
-		//var tokenEventId = HttpContext.User?.FindFirst("EventId")?.Value;
-		//if (tokenEventId != eventId.ToString())
-		//{
-		//	return Unauthorized();
-		//}
 		
 		if (userId != null)
 		{
@@ -291,6 +274,7 @@ public class TicketController : ControllerBase
 					var scannedTicket = await _ticketRepo.ScanAsync(ticketCode, eventId, userId);
 					if (scannedTicket != null)
 					{
+						await _hubContext.Clients.Group(eventId.ToString()).SendAsync("TicketScanned", scannedTicket.Id);
 						return Ok(scannedTicket.ToTicketDto());
 					}
 
@@ -322,6 +306,7 @@ public class TicketController : ControllerBase
 					var unscannedTicket = await _ticketRepo.UnscanAsync(ticketId, eventId);
 					if (unscannedTicket != null)
 					{
+						await _hubContext.Clients.Group(eventId.ToString()).SendAsync("TicketUnscanned", unscannedTicket.Id);
 						return Ok(unscannedTicket.ToTicketDto());
 					}
 
@@ -342,11 +327,6 @@ public class TicketController : ControllerBase
 	public async Task<IActionResult> DeleteTicket([FromRoute] int eventId, [FromRoute] int ticketId)
 	{
 		var userId = HttpContext.User?.FindFirst("userId")?.Value;
-		//var tokenEventId = HttpContext.User?.FindFirst("EventId")?.Value;
-		//if (tokenEventId != eventId.ToString())
-		//{
-		//	return Unauthorized();
-		//}
 		
 		if (userId != null)
 		{
@@ -359,6 +339,8 @@ public class TicketController : ControllerBase
 				{
 					return NotFound();
 				}
+				int wasScanned = ticket.Scanned ? 1 : 0;
+				await _hubContext.Clients.Group(eventId.ToString()).SendAsync("TicketDeleted", ticket.Id, wasScanned);
 				return Ok();
 			}
 		}

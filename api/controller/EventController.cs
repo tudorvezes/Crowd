@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using api.data;
 using api.dto.eventDto;
+using api.hub;
 using api.mappers;
 using api.model;
 using api.repository;
@@ -8,6 +9,7 @@ using api.service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace api.controller;
 
@@ -19,13 +21,15 @@ public class EventController : ControllerBase
 	private readonly IEventRepository _eventRepo;
 	private readonly IPermissionRepository _permissionRepo;
 	private readonly ITokenService _tokenService;
+	private readonly IHubContext<NotificationHub> _hubContext;
 
-	public EventController(UserManager<AppUser> userManager, IEventRepository eventRepo, IPermissionRepository permissionRepo, ITokenService tokenService)
+	public EventController(UserManager<AppUser> userManager, IEventRepository eventRepo, IPermissionRepository permissionRepo, ITokenService tokenService, IHubContext<NotificationHub> hubContext)
 	{
 		_userManager = userManager;
 		_eventRepo = eventRepo;
 		_permissionRepo = permissionRepo;
 		_tokenService = tokenService;
+		_hubContext = hubContext;
 	}
 
 	[HttpGet]
@@ -60,8 +64,7 @@ public class EventController : ControllerBase
 				var permission = await _permissionRepo.GetUserPermissionForEventAsync(appUser.Id, eventCode);
 				if (permission != null)
 				{
-					var eventToken = _tokenService.CreateEventToken(appUser, permission);
-					return Ok(permission.ToEventDto(eventToken));
+					return Ok(permission.ToEventDto());
 				}
 			}
 		}
@@ -203,8 +206,7 @@ public class EventController : ControllerBase
 				var createdEvent = await _eventRepo.CreateAsync(ev);
 				if (createdEvent != null)
 				{
-					var eventToken = _tokenService.CreateSuperAdminEventToken(appUser, createdEvent);
-					return Ok(createdEvent.ToEventDto(PermissionType.SuperAdmin, eventToken));
+					return Ok(createdEvent.ToEventDto(PermissionType.SuperAdmin));
 				}
 
 			}
@@ -229,7 +231,10 @@ public class EventController : ControllerBase
 
 					var eventModel = await _eventRepo.ChangeScanningStateAsync(eventId, state);
 					if (eventModel != null)
+					{
+						await _hubContext.Clients.Group(eventModel.Id.ToString()).SendAsync("EventScanningStateChanged", state ? 1 : 0);
 						return Ok();
+					}
 				}
 			}
 		}

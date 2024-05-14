@@ -10,11 +10,11 @@ import EventNotifications from "../../components/EventDetailCards/EventNotificat
 import {Ticket} from "../../model/Ticket";
 import {deleteTicket, getTickets, scanTicket, unscanTicket} from "../../services/TicketService";
 import {toast} from "react-toastify";
-import userEvent from "@testing-library/user-event";
-import CreateEventForm from "../../components/CreateEventForm/CreateEventForm";
-import CreateTicketForm from "../../components/CreateTicketForm/CreateTicketForm";
 import CreateTicketModal from "../../components/Modals/CreateTicketModal";
 import UploadFileModal from "../../components/Modals/UploadFileModal";
+import * as signalR from '@microsoft/signalr';
+import {set} from "react-hook-form";
+import {bool} from "yup";
 
 type Props = {
 
@@ -23,6 +23,7 @@ type Props = {
 const EventPage: React.FC<Props> = () => {
     let { eventCode } = useParams();
     const[event, setEvent] = useState<LongEvent>();
+    const[eventConnection, setEventConnection] = useState<signalR.HubConnection>();
 
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
@@ -62,6 +63,84 @@ const EventPage: React.FC<Props> = () => {
 
     }, [event]);
 
+    useEffect(() => {
+        if (!event) {
+            return;
+        }
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7121/notificationHub", { withCredentials: true })
+            .build();
+
+        connection.start().then(() => {
+            setEventConnection(connection);
+            console.log("Connection started");
+
+            connection.invoke("SubscribeToEvent", event.id.toString()).then(() => {
+                console.log("Subscribed to event");
+            });
+        }).catch(err => console.error("Error starting connection:", err));
+
+        connection.on("Connected", (eventId: string) => {
+            console.log("Connected with ID:", eventId);
+        });
+
+        connection.on("EventScanningStateChanged", (state: number) => {
+            setEvent(event => event ? {...event, scanningState: state === 1} : event);
+        });
+
+        connection.on("TicketAdded", (ticket: Ticket) => {
+            setTickets(prevTickets => [...prevTickets, ticket]);
+            setSoldTickets(prevSoldTickets => prevSoldTickets + 1);
+        });
+
+        connection.on("TicketsAdded", (tickets: Ticket[]) => {
+            setTickets(prevTickets => [...prevTickets, ...tickets]);
+            setSoldTickets(prevSoldTickets => prevSoldTickets + tickets.length);
+        });
+
+        connection.on("TicketDeleted", (ticketId: number, wasScanned: number) => {
+            console.log("Ticket deleted:", ticketId);
+            setTickets(tickets => tickets.filter(ticket => ticket.id !== ticketId));
+            setSoldTickets(soldTickets => soldTickets - 1);
+            if (wasScanned == 1) {
+                setScannedTickets(scannedTickets => scannedTickets - 1);
+            }
+        });
+
+        connection.on("TicketScanned", (ticketId: number) => {
+            setTickets(tickets => tickets.map(ticket => {
+                if (ticket.id === ticketId) {
+                    return {...ticket, scanned: true};
+                }
+                return ticket;
+            }));
+            setScannedTickets(scannedTickets => scannedTickets + 1);
+        });
+
+        connection.on("TicketUnscanned", (ticketId: number) => {
+            setTickets(tickets => tickets.map(ticket => {
+                if (ticket.id === ticketId) {
+                    return {...ticket, scanned: false};
+                }
+                return ticket;
+            }));
+            setScannedTickets(scannedTickets => scannedTickets - 1);
+        });
+
+        return () => {
+            connection.invoke("UnsubscribeFromEvent", event.id.toString()).then(() => {
+                console.log("Unsubscribed from event");
+
+                connection.stop().then(() => {
+                    setEventConnection(undefined);
+                    console.log("Connection stopped");
+                });
+            }).catch(err => console.error("Error unsubscribing from event:", err));
+
+        }
+    }, [event]);
+
     const fetchEvent = async () => {
         try {
             const res = await getEvent(eventCode!);
@@ -94,12 +173,6 @@ const EventPage: React.FC<Props> = () => {
     const deleteSelectedTicket = () => {
         if (selectedTicket) {
             deleteTicket(event?.id!, selectedTicket.id).then(() => {
-                const updatedTickets = tickets.filter(ticket => ticket !== selectedTicket);
-                if (selectedTicket.scanned) {
-                    setScannedTickets(scannedTickets - 1);
-                }
-                setSoldTickets(soldTickets - 1);
-                setTickets(updatedTickets);
                 setSelectedTicket(null);
             }).catch(err => {
                 toast.error("Failed to delete ticket");

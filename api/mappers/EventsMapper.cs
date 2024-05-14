@@ -20,7 +20,7 @@ public static class EventsMapper
 		return null;
 	}
 	
-	public static EventDto? ToEventDto(this Permission permission, string eventToken)
+	public static EventDto? ToEventDto(this Permission permission)
 	{
 		if (permission.Event != null)
 			return new EventDto
@@ -34,13 +34,12 @@ public static class EventsMapper
 				Overselling = permission.Event.Overselling,
 				ScanningState = permission.Event.ScanningState,
 				TicketTypes = permission.Event.TicketTypes.ToList().Select(t => t.ToTicketTypeDto()).ToList(),
-				EventToken = eventToken,
 				YourPermission = permission.PermissionType
 			};
 		return null;
 	}
 	
-	public static EventDto? ToEventDto(this Event e, PermissionType permissionType, string eventToken)
+	public static EventDto? ToEventDto(this Event e, PermissionType permissionType)
 	{
 		return new EventDto
 		{
@@ -53,7 +52,6 @@ public static class EventsMapper
 			Overselling = e.Overselling,
 			ScanningState = e.ScanningState,
 			TicketTypes = e.TicketTypes.ToList().Select(t => t.ToTicketTypeDto()).ToList(),
-			EventToken = eventToken,
 			YourPermission = permissionType
 		};
 	}

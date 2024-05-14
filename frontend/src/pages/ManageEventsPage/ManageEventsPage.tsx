@@ -7,6 +7,9 @@ import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import Navbar from "../../components/Navbar/Navbar";
 
+import './ManageEventsPage.css';
+import '../../App.css';
+
 const ManageEventsPage = () => {
     const {isLoggedIn} = useAuth();
 
@@ -14,11 +17,18 @@ const ManageEventsPage = () => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const navigate = useNavigate();
 
+    const checkDeviceWidth = () => {
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            navigate("/not-supported");
+        }
+    };
+
     React.useEffect(() => {
         if (!isLoggedIn()) {
             navigate("/");
         }
 
+        checkDeviceWidth();
         fetchEvents();
     }, []);
 
@@ -36,10 +46,10 @@ const ManageEventsPage = () => {
     return (
         <>
             <Navbar/>
-            <div>
-                <div>
-                    <h1>Manage Events</h1>
-                    <button onClick={() => navigate("/events/create")}>Create Event</button>
+            <div className='cl-page-width'>
+                <div className='horizontal-layout'>
+                    <h1 className='extra-bold'>Choose an event</h1>
+                    <button className='black-button' onClick={() => navigate("/events/create")}>Add event</button>
                 </div>
                 <EventCardList events={events}/>
             </div>

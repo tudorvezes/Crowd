@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'HelveticaNowDisplay';
+    src: url('assets/fonts/HelveticaNowDisplay/HelveticaNowDisplay-ExtraBold.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HelveticaNowDisplay';
+    src: url('assets/fonts/HelveticaNowDisplay/HelveticaNowDisplay-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HelveticaNowDisplay';
+    src: url('assets/fonts/HelveticaNowDisplay/HelveticaNowDisplay-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HelveticaNowText';
+    src: url('assets/fonts/HelveticaNowText/HelveticaNowText-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+.extra-bold {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 800;
+}
+
+.bold {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 700;
+}
+
+.medium {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 500;
+}
+
+.regular {
+    font-family: 'HelveticaNowText', sans-serif;
+    font-weight: 400;
+}
+
+h1 {
+    font-size: 58px;
+    margin: 0;
+    padding: 0;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 800;
+}
+
+h3 {
+    font-size: 28px;
+    margin: 0;
+    padding: 0;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 700;
+}
+
+h4 {
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 700;
+}
+
+p {
+    font-size: 17px;
+    margin: 0;
+    padding: 0;
+
+    font-family: 'HelveticaNowText', sans-serif;
+    font-weight: 400;
+}
+
+.cl-page-width {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+
+    padding: 30px 10px 0 10px;
+}
+
+.black-button {
+    background-color: black;
+    color: white;
+    min-width: 142px;
+    height: 42px;
+    padding: 10px 20px;
+    border-radius: 7px;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+
+    border: none;
+    cursor: pointer;
+}
+
+.black-button:hover {
+    background-color: #333;
+}
+
+
+.phone-users-message {
+    display: none;
+    text-align: center;
+    padding: 50px;
+    font-size: 20px;
+}
+
