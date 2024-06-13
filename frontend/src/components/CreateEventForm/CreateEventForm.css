@@ -1,0 +1,62 @@
+.form-container {
+    padding-top: 16px;
+
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.form-top-left {
+    margin-right: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-top-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.row-layout {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+hr {
+    border: 0;
+    height: 3px;
+    width: 8px;
+    background: #000000;
+}
+
+.black {
+    background-color: black;
+}
+
+.grey {
+    background-color: #F2F2F2;
+}
+
+.grey:hover {
+    background-color: #E6E6E6;
+}

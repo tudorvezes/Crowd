@@ -1,0 +1,58 @@
+.report-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    border-radius: 7px;
+    background-color: #f5f5f5;
+    position: relative;
+}
+
+.report-card .username-title-container {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.report-card .username {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+
+    background-color: #e6e6e6;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+.report-card .title {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: #000000;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.report-card .report-body {
+    padding-left: 1px;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #000000;
+}
+
+.report-card .report-timestamp {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    color: #313131;
+
+    position: absolute; /* Add this line to position it absolutely within the .report-card */
+    bottom: 10px; /* Adjust as needed for spacing from the bottom */
+    right: 10px; /* Adjust as needed for spacing from the left */
+}

@@ -1,8 +1,9 @@
 import * as React from "react";
 
 export type Ticket = {
-    id: number;
+    eventId: number;
     uniqueCode: string;
+
     firstName: string;
     lastName: string;
     dateOfBirth: string;
@@ -15,7 +16,6 @@ export type Ticket = {
     scannedAt: string;
 
     ticketTypeId: number;
-    eventId: number;
     appUserId: string;
 };
 
@@ -31,3 +31,36 @@ export type CreateTicket = {
 
     ticketTypeId: number;
 };
+
+export type UpdateTicket = {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    email: string;
+    phone: string;
+    address: string;
+    other: string;
+
+    ticketTypeId: number;
+};
+
+export type ScannedTicket = {
+    success: boolean;
+
+    eventId: number;
+    uniqueCode: string;
+
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    email: string;
+    phone: string;
+    address: string;
+    other: string;
+
+    scanned: boolean;
+    scannedAt: string;
+
+    ticketTypeId: number;
+    ticketTypeName: string;
+}

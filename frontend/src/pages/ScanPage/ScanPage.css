@@ -1,0 +1,372 @@
+.centre-page {
+    background-color: black;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 84px);
+}
+
+.centre-page .form-container {
+    background-color: black;
+    padding: 10px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 10vh;
+}
+
+.centre-page .form-container form,
+.camera-container form {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.centre-page .form-container form input,
+.camera-container form input {
+    min-width: 50%;
+    padding-left: 1rem;
+
+}
+
+.form-container h1 {
+    color: white;
+    line-height: 0.9;
+}
+
+.scan-body {
+    background-color: #000000;
+    min-height: calc(100vh - 98px - 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.mobile-page-width {
+    width: 900px;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.mobile-page-width .camera-container {
+    flex-grow: 1;
+    max-width: 30vw;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mobile-page-width .ticket-info {
+    flex-grow: 1;
+    width: 50%;
+    color: white;
+    padding-bottom: 10%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    z-index: 99;
+}
+
+.ticket-info .scanned {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.ticket-info .button-message-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ticket-info .message-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.ticket-info .message {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+
+    height: 20px;
+    background-color: white;
+    border-radius: 7px;
+    padding: 6px 10px;
+}
+
+.ticket-info .message p {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ticket-info .message img {
+    width: 20px;
+    height: 20px;
+}
+
+.ticket-info .as-button {
+    cursor: pointer;
+    max-width: 170px;
+    color: #e8e8e8;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(166, 0, 0, 0.44);
+}
+
+.ticket-info .as-button:hover {
+    background-color: rgba(143, 34, 34, 0.6);
+}
+
+.success {
+    color: #0d8c31;
+}
+
+.error {
+    color: #AD0606;
+}
+
+.ticket-type-name {
+    color: black;
+}
+
+.ticket-info .full-message {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    max-width: 100%;
+    gap: 12px;
+}
+
+.ticket-info .full-message h1 {
+    color: white;
+    line-height: 0.9;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scan-camera {
+    background-color: #000000;
+    border-radius: 10px;
+    position: relative;
+}
+
+.button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10; /* Ensure it stays above the scanner */
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+.change-device-button, .toggle-torch-button {
+    cursor: pointer; /* Optional: change cursor on hover */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px; /* Optional: change button width */
+    height: 30px; /* Optional: change button height */
+    background-color: rgba(255, 255, 255, 0.26); /* Optional: change button color */
+    border: none; /* Optional: remove border */
+    padding: 5px; /* Optional: change padding */
+    border-radius: 3px;
+}
+
+.change-device-button:hover, .toggle-torch-button:hover {
+    background-color: rgba(145, 145, 145, 0.42); /* Optional: change button color on hover */
+}
+
+.change-device-button img, .toggle-torch-button img {
+    width: 20px; /* Optional: change icon size */
+    height: 20px; /* Optional: change icon size */
+}
+
+
+.camera-container .input-field {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(70, 70, 70, 0.5);
+    color: white;
+    width: 100%;
+}
+
+.camera-container .icon-button {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(56, 56, 56, 0.5);
+    color: white;
+    min-width: 42px;
+}
+
+.camera-container .icon-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.camera-container .icon-button:hover {
+    background-color: #232323;
+}
+
+.event-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+    width: calc(100% - 40px);
+    height: 58px;
+    background-color: white; /* Optional */
+    padding: 20px; /* Optional */
+    z-index: 100;
+}
+
+.event-info button {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    cursor: pointer;
+}
+
+.event-info button img {
+    width: 30px;
+    height: 30px;
+}
+
+.event-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.event-details h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 768px) {
+    .scan-body {
+        min-height: calc(100vh - 98px);
+        display: flow;
+        padding: 0;
+    }
+
+    .mobile-page-width {
+        width: calc(100% - 40px);
+        height: calc(100vh - 98px - 40px);
+        padding: 20px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        overflow: auto; /* Enable scrolling */
+    }
+
+    .mobile-page-width .camera-container {
+        max-width: 100%;
+        flex-grow: 0;
+    }
+
+    .camera-container form {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .mobile-page-width .ticket-info {
+        width: 100%;
+        flex-grow: 0;
+    }
+
+    .ticket-info .full-message {
+        width: 100%;
+        align-items: center;
+    }
+
+    .ticket-info .full-message h1 {
+        font-size: 1.5rem;
+    }
+
+    .ticket-info .scanned {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ticket-info .scanned h1 {
+        font-size: 2rem;
+    }
+
+
+
+}
+
+.white-shadow {
+    box-shadow: 0px 0px 200px 3px rgba(255, 255, 255, 0.45);
+}
+
+.green-shadow {
+    box-shadow: 0px 0px 200px 3px rgba(255, 255, 255, 0.45);
+    animation: green-shadow-animation 5s 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes green-shadow-animation {
+    0% {
+        box-shadow: 0px 0px 200px 3px rgba(255, 255, 255, 0.45);
+    }
+    10% {
+        box-shadow: 0px 0px 200px 20px rgba(130, 255, 130, 0.45);
+    }
+    20% {
+        box-shadow: 0px 0px 200px 25px rgba(130, 255, 130, 0.45);
+    }
+    30% {
+        box-shadow: 0px 0px 200px 20px rgba(130, 255, 130, 0.45);
+    }
+    100% {
+        box-shadow: 0px 0px 200px 3px rgba(255, 255, 255, 0.45);
+    }
+}
+
+.red-shadow {
+    box-shadow: 0px 0px 200px 3px rgba(255, 255, 255, 0.45);
+    animation: red-shadow-animation 5s 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes red-shadow-animation {
+    0% {
+        box-shadow: 0px 0px 200px 3px rgba(255, 255, 255, 0.45);
+    }
+    10% {
+        box-shadow: 0px 0px 200px 20px rgba(255, 0, 0, 0.55);
+    }
+    20% {
+        box-shadow: 0px 0px 200px 25px rgba(255, 0, 0, 0.55);
+    }
+    30% {
+        box-shadow: 0px 0px 200px 20px rgba(255, 0, 0, 0.55);
+    }
+    100% {
+        box-shadow: 0px 0px 200px 3px rgba(255, 255, 255, 0.45);
+    }
+}

@@ -5,15 +5,15 @@ namespace api.repository;
 public interface ITicketRepository
 {
 	Task<List<Ticket>> GetAllForEventAsync(int eventId);
-	Task<Ticket?> GetByIdAndEventAsync(int ticketId, int eventId);
-	Task<Ticket?> GetByCodeAndEventAsync(string code, int eventId);
-	Task<Ticket?> GetByIdAsync(int id);
-	Task<Ticket> CreateAsync(Ticket ticket);
-	Task<Ticket?> DeleteAsync(int ticketId, int eventId);
+	Task<Ticket?> GetByCodeAndEventAsync(int eventId, string code);
+	Task<Ticket?> CreateAsync(Ticket ticket);
+	Task<List<Ticket>> CreateAsync(List<Ticket> tickets);
+	Task<Ticket?> DeleteAsync(int eventId, string code);
+	Task<Ticket?> UpdateAsync(Ticket ticket);
 	
-	Task<bool> CodeExistsAsync(string code, int eventId);
-	Task<Ticket?> ScanAsync(string code, int eventId, string appUserId);
-	Task<Ticket?> UnscanAsync(int ticketId, int eventId);
+	Task<Tuple<bool,Ticket?>> ScanAsync(int eventId, string code, string appUserId);
+	Task<Ticket?> UnscanAsync(int eventId, string code);
+	
 	Task<int> GetTicketsSoldCountAsync(int eventId);
 	Task<int> GetTicketsSoldCountForTypeAsync(int eventId, int ticketTypeId);
 }

@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import './EventCard.css';
 import '../../App.css';
 import {useEffect} from "react";
+import superAdminIcon from "../../assets/icons/super_admin_icon.svg";
 
 type Props = {
     event: ShortEvent;
@@ -40,7 +41,12 @@ const EventCard: React.FC<Props> = ({event}) => {
                     <p>{formattedStartDate} - {formattedEndDate}</p>)
                 }
             </div>
-            <h4>{event.uniqueCode}</h4>
+            <div className="code-container">
+                <h4>{event.uniqueCode}</h4>
+                {event.yourPermission === 0 && (
+                    <img src={superAdminIcon} alt="super admin icon" className="super-admin-icon"/>
+                )}
+            </div>
         </div>
     );
 };

@@ -7,8 +7,10 @@ import {UserLogin, UserRegister} from "../../model/AppUser";
 import {yupResolver} from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import {useEffect} from "react";
-import {getEvents} from "../../services/EventService";
-import Navbar from "../../components/Navbar/Navbar";
+import HomeNavbar from "../../components/Navbar/HomeNavbar";
+
+import './Homepage.css';
+import coverPhoto from '../../assets/images/Screenshot 2024-03-09 012900.png'
 
 
 const validation = Yup.object().shape({
@@ -29,48 +31,63 @@ const HomePage = () => {
         loginUser(form.username, form.password);
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
+        document.title = "Crowd";
         if (isLoggedIn()) {
             navigate("/events");
         }
     }, [isLoggedIn()]);
 
     return (
-        <>
-            <Navbar />
-            <section>
-                <div>
-                    <h1>
-                        Login
-                    </h1>
-                    <form onSubmit={handleSubmit(handleLogin)}>
-                        <div>
-                            <label htmlFor="username">Username</label>
-                            <input
-                                type="text"
-                                id="username"
-                                placeholder="Username"
-                                {...register("username")}
-                            />
-                            {errors.username ? (
-                                <p>{errors.username.message}</p>
-                            ) : ('')}
-                        </div>
-                        <div>
-                            <label htmlFor="password">Password</label>
-                            <input
-                                type="password"
-                                id="password"
-                                placeholder="Password"
-                                {...register("password")}
-                            />
-                            {errors.password ? (<p>{errors.password.message}</p>) : ('')}
-                        </div>
-                        <button type="submit">Login</button>
-                    </form>
+        <div className='main-container'>
+            <HomeNavbar />
+            <div className='window'>
+                <div className='page-width'>
+                    <div className='left-window'>
+                        <h1>
+                            Seamlessly <br/>scan your way
+                        </h1>
+                        <form onSubmit={handleSubmit(handleLogin)}>
+                            <div className='input-fields'>
+                                <label>
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        className='input-field'
+                                        placeholder="Type your username"
+                                        {...register("username")}
+                                    />
+                                    {errors.username ? (
+                                        <p>{errors.username.message}</p>
+                                    ) : ('')}
+                                </label>
+                                <label>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        className='input-field'
+                                        placeholder="Type your password"
+                                        {...register("password")}
+                                    />
+                                    {errors.password ? (<p>{errors.password.message}</p>) : ('')}
+                                </label>
+                            </div>
+                            <div className='buttons-row'>
+                                <button className='white-button' style={{maxWidth: '180px'}} type="submit">
+                                    Manage events
+                                </button>
+                                <button className='white-button' style={{maxWidth: '180px'}}>
+                                    Scan tickets
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div className="right-window">
+                    <img src={coverPhoto} alt="coverPhoto" />
+                    </div>
                 </div>
-            </section>
-        </>
+            </div>
+        </div>
     );
 };
 

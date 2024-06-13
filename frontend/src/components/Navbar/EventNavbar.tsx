@@ -14,16 +14,20 @@ const EventNavbar: React.FC<Props> = ({eventCode}) => {
     return (
         <nav>
             <div>
-                <Link to="/">
-                    <img src={logo} alt="CROWD logo"/>
-                </Link>
+                {isLoggedIn() ? (
+                    <Link to="/events">
+                        <img src={logo} alt="CROWD logo"/>
+                    </Link>
+                    ) : (
+                    <Link to="/">
+                        <img src={logo} alt="CROWD logo"/>
+                    </Link>
+                )}
             </div>
 
             {isLoggedIn() ? (
-                <div>
-                    <div>
-                        <p>{eventCode}</p>
-                    </div>
+                <div className='menu'>
+                    <p className='event-button'>{eventCode}</p>
                     <AccountDropdown />
                 </div>
             ) : (

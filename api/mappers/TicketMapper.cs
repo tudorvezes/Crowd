@@ -9,8 +9,9 @@ public static class TicketMapper
 	{
 		return new TicketDto
 		{
-			Id = ticket.Id,
+			EventId = ticket.EventId,
 			UniqueCode = ticket.UniqueCode,
+			
 			FirstName = ticket.FirstName,
 			LastName = ticket.LastName,
 			DateOfBirth = ticket.DateOfBirth,
@@ -21,7 +22,6 @@ public static class TicketMapper
 			Scanned = ticket.Scanned,
 			ScannedAt = ticket.ScannedAt,
 			TicketTypeId = ticket.TicketTypeId,
-			EventId = ticket.EventId,
 			AppUserId = ticket.AppUserId
 		};
 	}
@@ -62,6 +62,43 @@ public static class TicketMapper
 			Scanned = false,
 			ScannedAt = DateTime.Now,
 			AppUserId = null
+		};
+	}
+	
+	public static ScannedTicketDto ToScannedTicketDto(this Ticket ticket, bool success)
+	{
+		return new ScannedTicketDto
+		{
+			Success = success,
+
+			EventId = ticket.EventId,
+			UniqueCode = ticket.UniqueCode,
+			
+			FirstName = ticket.FirstName,
+			LastName = ticket.LastName,
+			DateOfBirth = ticket.DateOfBirth,
+			Email = ticket.Email,
+			Phone = ticket.Phone,
+			Address = ticket.Address,
+			Other = ticket.Other,
+			Scanned = ticket.Scanned,
+			ScannedAt = ticket.ScannedAt,
+			TicketTypeId = ticket.TicketTypeId,
+		};
+	}
+	
+	public static Ticket ToTicket(this UpdateTicketDto updateTicketDto)
+	{
+		return new Ticket
+		{
+			FirstName = updateTicketDto.FirstName,
+			LastName = updateTicketDto.LastName,
+			DateOfBirth = updateTicketDto.DateOfBirth,
+			Email = updateTicketDto.Email,
+			Phone = updateTicketDto.Phone,
+			Address = updateTicketDto.Address,
+			Other = updateTicketDto.Other,
+			TicketTypeId = updateTicketDto.TicketTypeId,
 		};
 	}
 	

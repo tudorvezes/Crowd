@@ -38,6 +38,7 @@ export const UserProvider = ({ children }: Props) => {
         setIsReady(true);
     }, []);
 
+
     const registerUser = async (username: string, email: string, phoneNumber: string, password: string) => {
         await registerAPI(username, email, phoneNumber, password).then((res) => {
             if (res) {
@@ -48,6 +49,7 @@ export const UserProvider = ({ children }: Props) => {
                 localStorage.setItem("user", JSON.stringify(userObj));
                 setToken(res?.data.token!);
                 setUser(userObj!);
+                axios.defaults.headers.common["Authorization"] = "Bearer " + res.data.token;
                 toast.success("Register Success!")
             }
         }).catch((e) => toast.warning("Server error occured"));
@@ -56,13 +58,14 @@ export const UserProvider = ({ children }: Props) => {
     const loginUser = async (username: string, password: string) => {
         await loginAPI(username, password).then((res) => {
             if (res) {
-                localStorage.setItem("token", res?.data.token);
+                localStorage.setItem("token", res.data.token);
                 const userObj = {
-                    username: res?.data.username,
+                    username: res.data.username,
                 };
                 localStorage.setItem("user", JSON.stringify(userObj));
-                setToken(res?.data.token!);
-                setUser(userObj!);
+                setToken(res.data.token);
+                setUser(userObj);
+                axios.defaults.headers.common["Authorization"] = "Bearer " + res.data.token;
                 toast.success("Login Success!")
             }
         }).catch((e) => toast.warning("Server error occured"));
@@ -71,8 +74,10 @@ export const UserProvider = ({ children }: Props) => {
     const logoutUser = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        delete axios.defaults.headers.common["Authorization"];
         setUser(null);
         setToken(null);
+
         navigate("/");
     };
 

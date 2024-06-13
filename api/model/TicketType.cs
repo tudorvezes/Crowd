@@ -14,5 +14,5 @@ public class TicketType
         
 	public int? EventId { get; set; }
 	
-	public List<Ticket> Tickets { get; set; } = new List<Ticket>();
+	public List<Ticket> Tickets { get; set; } = [];
 }

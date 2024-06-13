@@ -7,6 +7,7 @@ public class CreateTicketDto
 	[Required]
 	[MinLength(8, ErrorMessage = "Unique code must be at least 8 characters long.")]
 	public string UniqueCode { get; set; }
+	
 	[Required]
 	[MinLength(2, ErrorMessage = "First name must be at least 2 characters long.")]
 	public string FirstName { get; set; }

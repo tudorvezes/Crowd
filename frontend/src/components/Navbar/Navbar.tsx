@@ -16,7 +16,11 @@ const Navbar = () => {
             </div>
 
             {isLoggedIn() ? (
-                <AccountDropdown />
+                <div className='menu'>
+                    <Link to="/events" className="nav-text">Manage events</Link>
+                    <Link to="/scan" className="nav-text">Scan tickets</Link>
+                    <AccountDropdown />
+                </div>
             ) : (
                 <div>
                     <Link to="/" className="nav-text">Login</Link>

@@ -1,14 +1,18 @@
 import * as React from 'react';
-import {useState} from 'react';
-import {CreateEvent} from "../../model/Event";
-import {createEvent} from "../../services/EventService";
-import {useNavigate} from "react-router-dom";
+import { useState } from 'react';
+import { CreateEvent } from "../../model/Event";
+import { createEvent } from "../../services/EventService";
+import { useNavigate } from "react-router-dom";
+
+import './CreateEventForm.css';
+import addIcon from '../../assets/icons/add_FILL0_wght600_GRAD0_opsz40.svg';
+import deleteIcon from '../../assets/icons/remove_24dp_FILL0_wght600_GRAD0_opsz40.svg';
 
 const currencies: string[] = [
+    "RON",
     "USD",
     "EUR",
     "GBP",
-    "RON",
     "CAD",
     "AUD",
     "CHF",
@@ -30,7 +34,7 @@ const CreateEventForm: React.FC = () => {
         scanners: [],
         ticketTypes: [{ name: '', price: 0, currency: currencies[0], quantity: 0 }],
     });
-
+    const [capacity, setCapacity] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -39,10 +43,23 @@ const CreateEventForm: React.FC = () => {
                 ...prevState,
                 [name]: checked,
             }));
-        } else if (name === 'superAdmins' || name === 'admins' || name === 'scanners') {
+        } else if (name === 'capacity') {
+            if (parseInt(value) <= 0 || isNaN(parseInt(value))) {
+                return;
+            }
+            setCapacity(value);
             setFormData(prevState => ({
                 ...prevState,
-                [name]: value.split(',').map(item => item.trim()), // Split the input string by comma and trim whitespace
+                [name]: parseInt(value),
+            }));
+        } else if (name === 'superAdmins' || name === 'admins' || name === 'scanners') {
+            const sanitizedValue = value.replace(/[^a-z,0-9_]/g, '');
+
+            const itemsArray = sanitizedValue.split(',').map(item => item.trim());
+
+            setFormData(prevState => ({
+                ...prevState,
+                [name]: itemsArray,
             }));
         } else {
             setFormData(prevState => ({
@@ -51,7 +68,6 @@ const CreateEventForm: React.FC = () => {
             }));
         }
     };
-
 
     const handleAddTicketType = () => {
         setFormData(prevState => ({
@@ -71,24 +87,21 @@ const CreateEventForm: React.FC = () => {
         const { name, value } = e.target;
         setFormData(prevState => {
             const ticketTypes = [...prevState.ticketTypes];
-            if (value!=='' && (name == 'price' || name == 'currency' || name == 'quantity')) {
-                ticketTypes[index] = {
-                    ...ticketTypes[index],
-                    [name]: parseInt(value),
-                };
-                return { ...prevState, ticketTypes };
+            if (name === 'quantity' && parseInt(value) <= 0) {
+                return prevState;
             }
-            else {
-                ticketTypes[index] = {
-                    ...ticketTypes[index],
-                    [name]: value,
-                };
-                return { ...prevState, ticketTypes };
+            if (name === 'price' && parseFloat(value) <= 0) {
+                return prevState;
             }
+            ticketTypes[index] = {
+                ...ticketTypes[index],
+                [name]: name === 'price' || name === 'quantity' ? parseFloat(value) : value,
+            };
+            return { ...prevState, ticketTypes };
         });
     };
 
-    function handleTicketTypeCurrencyChange(index: number, e: React.ChangeEvent<HTMLSelectElement>) {
+    const handleTicketTypeCurrencyChange = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
         setFormData(prevState => {
             const ticketTypes = [...prevState.ticketTypes];
@@ -98,7 +111,7 @@ const CreateEventForm: React.FC = () => {
             };
             return { ...prevState, ticketTypes };
         });
-    }
+    };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -127,77 +140,82 @@ const CreateEventForm: React.FC = () => {
     }
 
     return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <div className="create-event-form-right">
-                    <h2>Event details</h2>
-                    <label>
-                        Event Name:
-                        <input type="text" name="name" value={formData.name} onChange={handleChange}/>
-                    </label>
-                    <br/>
-                    <label>
-                        Start Date:
-                        <input type="date" name="startDate" value={formData.startDate} min={getCurrentDate()} onChange={handleChange}/>
-                    </label>
-                    <label>
-                        End Date:
-                        <input type="date" name="endDate" value={formData.endDate} min={getStartDate()} onChange={handleChange}/>
-                    </label>
-                    <br/>
-                    <label>
-                        Capacity:
-                        <input type="number" name="capacity" value={formData.capacity} onChange={handleChange}/>
-                    </label>
-                    <label>
-                        Allow overselling:
-                        <input type="checkbox" name="overselling" checked={formData.overselling} onChange={handleChange}/>
-                    </label>
+        <div className='form-container'>
+            <form onSubmit={handleSubmit} className='form'>
+                <div className="form-top">
+                    <div className="form-top-left">
+                        <h2>Event details</h2>
+                        <label>
+                            <input className="input-field" placeholder='Event name' style={{ width: '340px' }} type="text" name="name" value={formData.name} onChange={handleChange}/>
+                        </label>
+                        <div className='row-layout'>
+                            <label>
+                                <input className="input-field" placeholder='Start date' style={{ width: '160px' }} type="date" name="startDate" value={formData.startDate} min={getCurrentDate()} onChange={handleChange}/>
+                            </label>
+                            <hr/>
+                            <label>
+                                <input className="input-field" placeholder='End date' style={{ width: '160px' }} type="date" name="endDate" value={formData.endDate} min={getStartDate()} onChange={handleChange}/>
+                            </label>
+                        </div>
+                        <div className='row-layout' style={{ gap: '14px' }}>
+                            <label>
+                                <input className="input-field" placeholder='Capacity' style={{ width: '160px' }} type="number" name="capacity" value={capacity} onChange={handleChange}/>
+                            </label>
+                            <label className="check-box">
+                                <input type="checkbox" name="overselling" checked={formData.overselling}
+                                       onChange={handleChange}/>
+                                <span className="checkmark"></span>
+                                <p>Allow overselling</p>
+                            </label>
+                        </div>
+                    </div>
 
-                    <h2>Permissions</h2>
-                    <label>
-                        Other super admins:
-                        <input type="text" name="superAdmins" value={formData.superAdmins} onChange={handleChange}/>
-                    </label>
-                    <br/>
-                    <label>
-                        Other admins:
-                        <input type="text" name="admins" value={formData.admins} onChange={handleChange}/>
-                    </label>
-                    <br/>
-                    <label>
-                        Other scanners:
-                        <input type="text" name="scanners" value={formData.scanners} onChange={handleChange}/>
-                    </label>
+                    <div className='form-top-right'>
+                        <h2>Permissions</h2>
+                        <label>
+                            <input className="input-field" placeholder='Other super-admins' style={{ width: '380px' }} type="text" name="superAdmins" value={formData.superAdmins} onChange={handleChange}/>
+                        </label>
+                        <label>
+                            <input className="input-field" placeholder='Other admins' style={{ width: '380px' }} type="text" name="admins" value={formData.admins} onChange={handleChange}/>
+                        </label>
+                        <label>
+                            <input className="input-field" placeholder='Other scanners' style={{ width: '380px' }} type="text" name="scanners" value={formData.scanners} onChange={handleChange}/>
+                        </label>
+                    </div>
                 </div>
 
-                <div className="create-event-form-left">
+                <div className="form-bottom">
                     <h2>Ticket types</h2>
                     {formData.ticketTypes.map((ticketType, index) => (
-                        <div key={index}>
+                        <div key={index} className='row-layout'>
                             <label>
-                                Ticket name:
                                 <input
+                                    className="input-field"
                                     type="text"
                                     name="name"
+                                    style={{ width: '240px' }}
+                                    placeholder='Ticket type name'
                                     value={ticketType.name}
                                     onChange={(e) => handleTicketTypeChange(index, e)}
                                 />
                             </label>
                             <label>
-                                Price:
                                 <input
+                                    className="input-field"
                                     type="number"
                                     name="price"
+                                    style={{ width: '140px' }}
+                                    placeholder='Price'
                                     value={ticketType.price}
                                     onChange={(e) => handleTicketTypeChange(index, e)}
                                 />
                             </label>
                             <label>
-                                Currency:
                                 <select
+                                    className="select-field"
                                     name="currency"
                                     value={ticketType.currency}
+                                    style={{ width: '100px' }}
                                     onChange={(e) => handleTicketTypeCurrencyChange(index, e)}>
                                     {currencies.map((currency, currencyIndex) => (
                                         <option key={currencyIndex} value={currency}>{currency}</option>
@@ -205,25 +223,32 @@ const CreateEventForm: React.FC = () => {
                                 </select>
                             </label>
                             <label>
-                                Quantity:
                                 <input
+                                    className="input-field"
                                     type="number"
                                     name="quantity"
+                                    style={{ width: '140px' }}
+                                    placeholder='Quantity'
                                     value={ticketType.quantity}
                                     onChange={(e) => handleTicketTypeChange(index, e)}
                                 />
                             </label>
-                            {index !== 0 && ( // Render delete button for all ticket types except the first one
-                                <button type="button" onClick={() => handleDeleteTicketType(index)}>Delete</button>
+                            {index === 0 ? (
+                                <button className='icon-button black' type="button" onClick={handleAddTicketType}>
+                                    <img src={addIcon} alt="Add ticket type"/>
+                                </button>
+                            ) : (
+                                <button className='icon-button grey' type="button" onClick={() => handleDeleteTicketType(index)}>
+                                    <img src={deleteIcon} alt="Delete ticket type"/>
+                                </button>
                             )}
                         </div>
                     ))}
-                    <button type="button" onClick={handleAddTicketType}>Add ticket type</button>
                 </div>
 
-                <button type="submit">Create Event</button>
+                <button className='black-button' type="submit" style={{ width: '180px', marginTop: '10px' }}>Create Event</button>
             </form>
-        </>
+        </div>
     );
 };
 

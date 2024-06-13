@@ -15,6 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 	public DbSet<TicketType> TicketTypes { get; set; }
 	public DbSet<Ticket> Tickets { get; set; }
 	public DbSet<Permission> Permissions { get; set; }
+	public DbSet<Report> Reports { get; set; }
 	
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
@@ -29,6 +30,9 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 			.HasOne(p => p.Event)
 			.WithMany(u => u.Permissions)
 			.HasForeignKey(p => p.EventId);
+		
+		builder.Entity<Ticket>()
+			.HasKey(t => new { t.EventId, t.UniqueCode });
 		
 		List<IdentityRole> roles =
 		[

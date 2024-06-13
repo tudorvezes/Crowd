@@ -6,7 +6,9 @@ import App from "../App";
 import EventPage from "../pages/EventPage/EventPage";
 import React from "react";
 import CreateEventPage from "../pages/CreateEventPage/CreateEventPage";
-import NotSupportedPage from "../pages/NotSupportedPage/NotSupportedPage";
+import NotSupportedPage from "../pages/ErrorPages/NotSupportedPage";
+import ScanPage from "../pages/ScanPage/ScanPage";
+import UpdateEventPage from "../pages/UpdateEventPage/UpdateEventPage";
 
 export const router = createBrowserRouter([
     {
@@ -18,7 +20,9 @@ export const router = createBrowserRouter([
             { path: '/events/create', element: <CreateEventPage />},
             { path: '/register', element: <RegisterPage /> },
             { path: '/event/:eventCode', element: <EventPage /> },
-            { path: 'not-supported', element: <NotSupportedPage /> }
+            { path: '/event/:eventCode/edit', element: <UpdateEventPage />},
+            { path: '/scan', element: <ScanPage />},
+            { path: '/not-supported', element: <NotSupportedPage /> }
         ]
     },
 ]);

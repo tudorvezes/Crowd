@@ -1,0 +1,245 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.event-window {
+    background-color: #000000;
+    max-height: calc(100vh - 84px - 20px);
+    flex-grow: 1;
+
+    display: flex;
+    padding: 0 20px 20px 20px;
+    gap: 1rem;
+}
+
+.left-pane {
+    flex: 0 0 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    min-width: 300px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1.1rem;
+}
+
+.right-pane {
+    flex: 0 0 calc(75% - 16px);
+    display: flex;
+    flex-direction: column;
+
+    background-color: #262626;
+    border-radius: 10px;
+    min-width: 500px;
+}
+
+.tickets-controls {
+    flex: 0 0 auto;
+    padding: 1.1rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 32px;
+}
+
+.search-bar img {
+    position: absolute;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    pointer-events: none; /* Ensure the icon does not block input interactions */
+}
+
+.search-bar input {
+    font-family: 'HelveticaNowText', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+
+
+    background-color: #4C4C4C;
+    border-radius: 7px;
+    border: none;
+    padding: 0.5rem 0.5rem 0.5rem 40px;
+    color: #ffffff;
+    min-width: 240px;
+    width: 100%;
+}
+
+.search-bar input::placeholder {
+    color: #c7c7c7;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.buttons button {
+    background-color: #4C4C4C;
+    height: 32px;
+    width: 32px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    display: flex; /* Add this */
+    justify-content: center; /* Move this */
+    align-items: center; /* Move this */
+}
+
+.buttons button:hover {
+    background-color: #414141;
+}
+
+.buttons button:disabled {
+    background-color: #4C4C4C;
+    cursor: not-allowed;
+}
+
+.buttons button img {
+    width: 20px;
+    height: 20px;
+}
+
+.table-container {
+    flex: 1;
+    overflow: auto;
+    width: 100%;
+
+}
+
+.table {
+    background-color: rgba(0, 0, 0, 0);
+    table-layout: fixed;
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.table thead {
+    background-color: #4C4C4C;
+    color: #ffffff;
+}
+
+.table tbody {
+    color: white;
+}
+
+.table th,
+.table td {
+    border-right: 1px solid #595959;
+    padding: 0;
+    z-index: 0;
+}
+
+.table th:last-child,
+.table td:last-child {
+    border-right: none;
+}
+
+.table th {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0.8rem;
+
+    text-align: left;
+
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #4C4C4C;
+}
+
+.table th::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #595959;
+}
+
+.table th:last-child::after {
+    display: none;
+}
+
+
+
+.table td {
+    font-family: 'HelveticaNowText', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 0.8rem;
+}
+
+.table .row-selected {
+    background-color: #343434;
+}
+
+.table .col-scanned {
+    text-align: center;
+    width: 20px;
+}
+
+.table .col-code {
+    text-align: left;
+    width: 200px;
+}
+
+.table .col-firstname {
+    text-align: left;
+    width: 150px;
+}
+
+.table .col-lastname {
+    text-align: left;
+    width: 150px;
+}
+
+.table .col-email {
+    text-align: left;
+    width: 300px;
+}
+
+.table .col-phone {
+    text-align: left;
+    width: 200px;
+}
+
+
+.bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center; /* Center the content horizontally */
+    transform: translateY(-2px); /* Center the content vertically */
+}
+
+.green {
+    background-color: #30A84C;
+}
+
+.red {
+    background-color: #CA4848;
+}
+
+

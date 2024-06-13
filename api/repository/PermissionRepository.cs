@@ -20,19 +20,19 @@ public class PermissionRepository : IPermissionRepository
 			.ToListAsync();
 	}
 
-	public async Task<List<Permission>> GetUserPermissionsAsync(AppUser appUser, PermissionType permissionLevel)
+	public async Task<List<Permission>> GetUserPermissionsAsync(string appUserId, PermissionType permissionLevel)
 	{
 		if (permissionLevel == PermissionType.SuperAdmin)
 		{
 			return await _context.Permissions
-				.Where(p => p.AppUser == appUser && p.PermissionType == PermissionType.SuperAdmin)
+				.Where(p => p.AppUser != null && p.AppUser.Id == appUserId && p.PermissionType == PermissionType.SuperAdmin)
 				.Include(p => p.Event)
 				.ToListAsync();
 		}
 		if (permissionLevel == PermissionType.Admin)
 		{
 			return await _context.Permissions
-				.Where(p => p.AppUser == appUser && (p.PermissionType == PermissionType.Admin || p.PermissionType == PermissionType.SuperAdmin))
+				.Where(p => p.AppUser != null && p.AppUser.Id == appUserId && (p.PermissionType == PermissionType.Admin || p.PermissionType == PermissionType.SuperAdmin))
 				.Include(p => p.Event)
 				.ToListAsync();
 		}
@@ -60,5 +60,23 @@ public class PermissionRepository : IPermissionRepository
 	{
 		return await _context.Permissions
 			.FirstOrDefaultAsync(p => p.AppUserId == appUserId && p.EventId == eventId);
+	}
+
+	public async Task<List<Permission>> GetEventPermissionsAsync(int eventId)
+	{
+		return await _context.Permissions
+			.Where(p => p.EventId == eventId)
+			.Include(p => p.AppUser)
+			.ToListAsync();
+	}
+
+	public async Task<List<Permission>> DeleteEventPermissionsAsync(int eventId)
+	{
+		var permissions = await _context.Permissions
+			.Where(p => p.EventId == eventId)
+			.ToListAsync();
+		_context.Permissions.RemoveRange(permissions);
+		await _context.SaveChangesAsync();
+		return permissions;
 	}
 }

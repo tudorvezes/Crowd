@@ -11,26 +11,18 @@ import './ManageEventsPage.css';
 import '../../App.css';
 
 const ManageEventsPage = () => {
-    const {isLoggedIn} = useAuth();
+    const {token, isLoggedIn} = useAuth();
 
     const [events, setEvents] = React.useState<ShortEvent[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
     const navigate = useNavigate();
 
-    const checkDeviceWidth = () => {
-        if (window.matchMedia("(max-width: 768px)").matches) {
-            navigate("/not-supported");
-        }
-    };
-
     React.useEffect(() => {
-        if (!isLoggedIn()) {
-            navigate("/");
+        document.title = "Manage events | Crowd";
+        if (token) {
+            fetchEvents();
         }
-
-        checkDeviceWidth();
-        fetchEvents();
-    }, []);
+    }, [token]);
 
     const fetchEvents = () => {
         getEvents().then((res) => {

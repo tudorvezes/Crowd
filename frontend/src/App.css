@@ -20,6 +20,13 @@
 }
 
 @font-face {
+    font-family: 'HelveticaNowDisplay';
+    src: url('assets/fonts/HelveticaNowDisplay/HelveticaNowDisplay-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'HelveticaNowText';
     src: url('assets/fonts/HelveticaNowText/HelveticaNowText-Regular.otf') format('opentype');
     font-weight: 400;
@@ -42,6 +49,11 @@
 }
 
 .regular {
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 400;
+}
+
+.text {
     font-family: 'HelveticaNowText', sans-serif;
     font-weight: 400;
 }
@@ -53,6 +65,15 @@ h1 {
 
     font-family: 'HelveticaNowDisplay', sans-serif;
     font-weight: 800;
+}
+
+h2 {
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 700;
 }
 
 h3 {
@@ -82,12 +103,20 @@ p {
     font-weight: 400;
 }
 
+.text-white {
+    color: white;
+}
+
+.text-black {
+    color: black;
+}
+
 .cl-page-width {
     max-width: 1000px;
     width: 100%;
     margin: 0 auto;
 
-    padding: 30px 10px 0 10px;
+    padding: 40px 10px 0 10px;
 }
 
 .black-button {
@@ -110,11 +139,149 @@ p {
     background-color: #333;
 }
 
+.white-button {
+    background-color: white;
+    color: black;
+    min-width: 142px;
+    height: 42px;
+    padding: 10px 20px;
+    border-radius: 7px;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+
+    border: none;
+    cursor: pointer;
+}
+
+.white-button:hover {
+    background-color: #f9f9f9;
+}
+
+.icon-button {
+    background-color: #000000;
+    color: white;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'HelveticaNowDisplay', sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+
+    border: none;
+    cursor: pointer;
+}
+
+.icon-button:hover {
+    background-color: #333;
+}
+
+.icon-button img {
+    width: 26px;
+    height: 26px;
+}
+
+.input-field {
+    height: 22px;
+    padding: 10px;
+
+    background-color: #F2F2F2;
+    border-radius: 7px;
+    border: none;
+
+    font-family: 'HelveticaNowText', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.input-field:focus {
+    outline: none;
+}
+
+.check-box input[type="checkbox"] {
+    opacity: 0;
+    cursor: pointer;
+}
+
+.check-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    align-items: center;
+    gap: 5px;
+}
+
+.check-box .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #F2F2F2;
+    border-radius: 5px; /* Border radius */
+}
+
+.check-box input[type="checkbox"]:checked + .checkmark {
+    background-color: #2196F3;
+}
+
+.check-box .checkmark:hover {
+    background-color: #ccc;
+}
+
+.check-box p {
+    font-size: 14px;
+}
+
+.select-field {
+    height: 42px;
+    padding: 10px;
+
+    background-color: #F2F2F2;
+    border-radius: 7px;
+    border: none;
+
+    font-family: 'HelveticaNowText', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.select-field:focus {
+    outline: none;
+}
 
 .phone-users-message {
     display: none;
     text-align: center;
     padding: 50px;
     font-size: 20px;
+}
+
+::-webkit-scrollbar {
+    width: 10px; /* Make the scrollbar thinner */
+    height: 10px; /* Make the scrollbar shorter */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* color of the scrollbar handle */
+    border-radius: 5px; /* roundness of the scrollbar handle */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* color of the scrollbar handle on hover */
 }
 

@@ -21,35 +21,53 @@ public class TicketRepository : ITicketRepository
 			.ToListAsync();
 	}
 
-	public async Task<Ticket?> GetByIdAndEventAsync(int ticketId, int eventId)
-	{
-		return await _context.Tickets
-			.FirstOrDefaultAsync(t => t.Id == ticketId && t.EventId == eventId);
-	}
-
-	public async Task<Ticket?> GetByCodeAndEventAsync(string code, int eventId)
+	public async Task<Ticket?> GetByCodeAndEventAsync(int eventId, string code)
 	{
 		return await _context.Tickets
 			.FirstOrDefaultAsync(t => t.UniqueCode == code && t.EventId == eventId);
 	}
 
-	public async Task<Ticket?> GetByIdAsync(int id)
+	public async Task<Ticket?> CreateAsync(Ticket ticket)
 	{
-		return await _context.Tickets
-			.FirstOrDefaultAsync(t => t.Id == id);
+		try 
+		{
+			_context.Tickets.Add(ticket);
+			await _context.SaveChangesAsync();
+			return ticket;
+		}
+		catch (DbUpdateException e)
+		{
+			return null;
+		}
+	}
+	
+	public async Task<List<Ticket>> CreateAsync(List<Ticket> tickets)
+	{
+		var createdTickets = new List<Ticket>();
+
+		foreach (var ticket in tickets)
+		{
+			try
+			{
+				_context.Tickets.Add(ticket);
+				await _context.SaveChangesAsync();
+				createdTickets.Add(ticket);
+			}
+			catch (DbUpdateException e)
+			{
+				// Log the exception or handle it as needed
+				// Continue with the next ticket
+				_context.Entry(ticket).State = EntityState.Detached; // Detach the entity to prevent tracking issues
+			}
+		}
+
+		return createdTickets;
 	}
 
-	public async Task<Ticket> CreateAsync(Ticket ticket)
+	public async Task<Ticket?> DeleteAsync(int eventId, string code)
 	{
-		await _context.Tickets.AddAsync(ticket);
-		await _context.SaveChangesAsync();
-		return ticket;
-	}
-
-	public async Task<Ticket?> DeleteAsync(int ticketId, int eventId)
-	{
-		var ticket = _context.Tickets
-			.FirstOrDefault(t => t.Id == ticketId && t.EventId == eventId);
+		var ticket = await _context.Tickets
+			.FirstOrDefaultAsync(t => t.EventId == eventId && t.UniqueCode == code);
 		if (ticket == null)
 		{
 			return null;
@@ -59,24 +77,40 @@ public class TicketRepository : ITicketRepository
 		await _context.SaveChangesAsync();
 		return ticket;
 	}
-
-	public async Task<bool> CodeExistsAsync(string code, int eventId)
+	
+	public async Task<Ticket?> UpdateAsync(Ticket ticket)
 	{
-		return await _context.Tickets
-			.AnyAsync(t => t.UniqueCode == code && t.EventId == eventId);
+		var existingTicket = await _context.Tickets.FirstOrDefaultAsync(t => t.EventId == ticket.EventId && t.UniqueCode == ticket.UniqueCode);
+		if (existingTicket == null)
+		{
+			return null;
+		}
+		
+		existingTicket.FirstName = ticket.FirstName;
+		existingTicket.LastName = ticket.LastName;
+		existingTicket.DateOfBirth = ticket.DateOfBirth;
+		existingTicket.Email = ticket.Email;
+		existingTicket.Phone = ticket.Phone;
+		existingTicket.Address = ticket.Address;
+		existingTicket.Other = ticket.Other;
+		existingTicket.TicketTypeId = ticket.TicketTypeId;
+		
+		await _context.SaveChangesAsync();
+		return existingTicket;
 	}
 
-	public async Task<Ticket?> ScanAsync(string code, int eventId, string appUserId)
+	public async Task<Tuple<bool,Ticket?>> ScanAsync(int eventId, string code, string appUserId)
 	{
 		var existingTicket = await _context.Tickets
 			.FirstOrDefaultAsync(t => t.UniqueCode == code && t.EventId == eventId);
 		if (existingTicket == null)
 		{
-			return null;
+			return new Tuple<bool, Ticket?>(false, null);
 		}
+		
 		if (existingTicket.Scanned)
 		{
-			throw new Exception("Ticket already scanned!");
+			return new Tuple<bool, Ticket?>(false, existingTicket);
 		}
 
 		existingTicket.Scanned = true;
@@ -84,13 +118,13 @@ public class TicketRepository : ITicketRepository
 		existingTicket.AppUserId = appUserId;
 		
 		await _context.SaveChangesAsync();
-		return existingTicket;
+		return new Tuple<bool, Ticket?>(true, existingTicket);
 	}
 
-	public async Task<Ticket?> UnscanAsync(int ticketId, int eventId)
+	public async Task<Ticket?> UnscanAsync(int eventId, string code)
 	{
 		var existingTicket = await _context.Tickets
-			.FirstOrDefaultAsync(t => t.Id == ticketId && t.EventId == eventId);
+			.FirstOrDefaultAsync(t => t.EventId == eventId && t.UniqueCode == code);
 		if (existingTicket == null)
 		{
 			return null;

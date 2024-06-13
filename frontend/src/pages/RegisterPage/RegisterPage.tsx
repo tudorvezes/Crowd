@@ -5,6 +5,7 @@ import {useAuth} from "../../context/useAuth";
 import {useForm} from "react-hook-form";
 import {UserRegister} from "../../model/AppUser";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {useEffect} from "react";
 
 const validation = Yup.object().shape({
     username: string().required('Username is required'),
@@ -24,6 +25,10 @@ const RegisterPage = () => {
     const handleRegister = (form: UserRegister) => {
         registerUser(form.username, form.email, form.phoneNumber, form.password);
     }
+
+    useEffect(() => {
+        document.title = "Register | Crowd";
+    }, []);
 
     return (
         <section>

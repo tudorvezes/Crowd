@@ -1,4 +1,6 @@
 import * as React from 'react';
+import './EventDetailsCards.css';
+import '../../App.css'
 
 interface Props {
     eventId: number;
@@ -10,12 +12,18 @@ interface Props {
 
 const ScanDetails: React.FC<Props> = ({eventId, scannedTickets, totalTickets, scanningState, changeScanningState}) => {
     return (
-        <div>
-            <p>{scannedTickets}/{totalTickets} scanned</p>
+        <div className='card scan-card'>
+            <div className='text-container'>
+                <p className='big medium'>{scannedTickets}</p>
+                <p className='big regular'>/</p>
+                <p className='big regular'>{totalTickets}</p>
+                <p className='small regular'>scanned</p>
+            </div>
+
             {scanningState ? (
-                <button onClick={changeScanningState}>Stop scanning</button>
+                <button className='black-button' onClick={changeScanningState}>Stop scanning</button>
             ) : (
-                <button onClick={changeScanningState}>Start scanning</button>
+                <button className='black-button' onClick={changeScanningState}>Start scanning</button>
             )}
         </div>
     )

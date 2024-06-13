@@ -14,7 +14,8 @@ public class Event
 	public bool Overselling { get; set; }
 	public bool ScanningState { get; set; }
 	
-	public List<TicketType> TicketTypes { get; set; } = new List<TicketType>();
-	public List<Ticket> Tickets { get; set; } = new List<Ticket>();
-	public List<Permission> Permissions { get; set; } = new List<Permission>();
+	public List<TicketType> TicketTypes { get; set; } = [];
+	public List<Ticket> Tickets { get; set; } = [];
+	public List<Permission> Permissions { get; set; } = [];
+	public List<Report> Reports { get; set; } = [];
 }

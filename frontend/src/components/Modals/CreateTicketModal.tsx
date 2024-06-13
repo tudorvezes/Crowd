@@ -21,7 +21,7 @@ const CreateTicketModal: React.FC<ModalProps> = ({event, isOpen, onClose}) => {
                     Close
                 </button>
                 <h1>Create ticket</h1>
-                <CreateTicketForm event={event} />
+                <CreateTicketForm event={event} onClose={onClose} />
             </div>
         </div>
     );

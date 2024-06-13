@@ -32,3 +32,15 @@ p {
     font-family: 'HelveticaNowText', sans-serif;
     font-weight: 400;
 }
+
+.code-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+}
+
+.code-container img {
+    width: 14px;
+    height: 14px;
+}

@@ -3,11 +3,12 @@ import {LongEvent} from "../../model/Event";
 import {CreateTicket} from "../../model/Ticket";
 import {createTicket} from "../../services/TicketService";
 
-type Props = {
+interface Props {
     event: LongEvent;
+    onClose: () => void;
 }
 
-const CreateTicketForm: React.FC<Props> = ({event}) => {
+const CreateTicketForm: React.FC<Props> = ({event, onClose}) => {
     const [formData, setFormData] = React.useState<CreateTicket>({
         uniqueCode: "",
         firstName: "",
@@ -49,6 +50,7 @@ const CreateTicketForm: React.FC<Props> = ({event}) => {
         e.preventDefault();
         createTicket(event.id, formData).then(() => {
             console.log("Ticket created");
+            onClose();
         });
     };
 

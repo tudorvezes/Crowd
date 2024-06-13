@@ -5,10 +5,10 @@ namespace api.mappers;
 
 public static class EventsMapper
 {
-	public static ManageEventsDto? ToManageEventsDto(this Permission permission)
+	public static ShortEventDto? ToShortEventDto(this Permission permission)
 	{
 		if (permission.Event != null)
-			return new ManageEventsDto
+			return new ShortEventDto
 			{
 				Id = permission.Event.Id,
 				UniqueCode = permission.Event.UniqueCode,
@@ -54,6 +54,25 @@ public static class EventsMapper
 			TicketTypes = e.TicketTypes.ToList().Select(t => t.ToTicketTypeDto()).ToList(),
 			YourPermission = permissionType
 		};
+	}
+	
+	public static FullEventDto? ToFullEventDto(this Permission permission)
+	{
+		if (permission.Event != null)
+			return new FullEventDto
+			{
+				Id = permission.Event.Id,
+				UniqueCode = permission.Event.UniqueCode,
+				Name = permission.Event.Name,
+				StartDate = permission.Event.StartDate,
+				EndDate = permission.Event.EndDate,
+				Capacity = permission.Event.Capacity,
+				Overselling = permission.Event.Overselling,
+				ScanningState = permission.Event.ScanningState,
+				TicketTypes = permission.Event.TicketTypes.ToList().Select(t => t.ToTicketTypeDto()).ToList(),
+				YourPermission = permission.PermissionType
+			};
+		return null;
 	}
 	
 	public static Event FromCreateEventDto(this CreateEventDto e)

@@ -28,6 +28,18 @@ public static class TicketTypeMappers
 		};
 	}
 	
+	public static TicketType FromTicketTypeDto(this TicketTypeDto ticketTypeDto)
+	{
+		return new TicketType
+		{
+			Id = ticketTypeDto.Id,
+			Name = ticketTypeDto.Name,
+			Price = ticketTypeDto.Price,
+			Currency = ticketTypeDto.Currency,
+			Quantity = ticketTypeDto.Quantity
+		};
+	}
+	
 	public static ShortTicketTypeDto ToShortTicketTypeDto(this TicketType ticketType)
 	{
 		return new ShortTicketTypeDto

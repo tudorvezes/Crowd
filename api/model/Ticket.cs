@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.model;
 
 [Table("Tickets")]
+//[Index(nameof(EventId), nameof(UniqueCode), IsUnique = true)]
 public class Ticket
 {
-	public int Id { get; set; }
+	public int EventId { get; set; } 
 	public string UniqueCode { get; set; }
+	
 	public string FirstName { get; set; }
 	public string LastName { get; set; }
 	public DateTime DateOfBirth { get; set; }
@@ -20,6 +23,6 @@ public class Ticket
 	public int? TicketTypeId { get; set; }
 	public TicketType? TicketType { get; set; }
 	
-	public int? EventId { get; set; } 
 	public string? AppUserId { get; set; }
+	public List<Report> Reports { get; set; } = [];
 }

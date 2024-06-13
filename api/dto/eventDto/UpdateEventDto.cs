@@ -6,6 +6,9 @@ namespace api.dto.eventDto;
 public class UpdateEventDto
 {
 	[Required]
+	public int Id { get; set; }
+	
+	[Required]
 	[MinLength(3, ErrorMessage = "Name must be at least 3 characters long.")]
 	[MaxLength(50, ErrorMessage = "Name must be at most 50 characters long.")]
 	public string Name { get; set; } = string.Empty;
@@ -14,6 +17,8 @@ public class UpdateEventDto
 	[DataType(DataType.Date)]
 	public DateTime StartDate { get; set; }
 	
+	[Required]
+	[DataType(DataType.Date)]
 	public DateTime EndDate { get; set; }
 	
 	[Required]
@@ -22,10 +27,13 @@ public class UpdateEventDto
 	[Required]
 	public bool Overselling { get; set; }
 	
+	public List<TicketTypeDto> ExistingTicketTypes { get; set; } = [];
+	
+	public List<CreateTicketTypeDto> NewTicketTypes { get; set; } = [];
+	
 	[Required]
-	[MinLength(1, ErrorMessage = "At least one ticket type must be provided.")]
-	public List<CreateTicketTypeDto> TicketTypesDtos { get; set; } = new List<CreateTicketTypeDto>();
-	public List<string> SuperAdmins { get; set; } = new List<string>();
-	public List<string> Admins { get; set; } = new List<string>();
-	public List<string> Scanners { get; set; } = new List<string>();
+	[MinLength(1, ErrorMessage = "There must be at least one super admin.")]
+	public List<string> SuperAdmins { get; set; } = [];
+	public List<string> Admins { get; set; } = [];
+	public List<string> Scanners { get; set; } = [];
 }

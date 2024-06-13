@@ -5,10 +5,14 @@ import "./AccountDropdown.css";
 const AccountDropdown = () => {
     const {user, logoutUser} = useAuth();
 
+    const handleLogout = () => {
+        logoutUser();
+    }
+
     return (
         <>
             <div className="dropdown">
-                <button className="dropbtn">{user?.username}</button>
+                <button className="drop-button">{user?.username}</button>
                 <div className="dropdown-content">
                     <a href="#">Profile</a>
                     <a onClick={logoutUser}>Logout</a>

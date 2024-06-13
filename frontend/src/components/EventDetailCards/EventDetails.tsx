@@ -1,4 +1,6 @@
 import * as React from 'react';
+import './EventDetailsCards.css';
+import '../../App.css'
 
 type Props = {
     eventId: number;
@@ -9,9 +11,15 @@ type Props = {
 
 const EventDetails: React.FC<Props> = ({eventId, eventName, soldTickets, totalTickets}) => {
     return (
-        <div>
-            <h1>{eventName}</h1>
-            <p>{soldTickets}/{totalTickets} sold</p>
+        <div className='card details-card'>
+            <h3>{eventName}</h3>
+
+            <div className='text-container'>
+                <p className='big medium'>{soldTickets}</p>
+                <p className='big regular'>/</p>
+                <p className='big regular'>{totalTickets}</p>
+                <p className='small regular'>sold</p>
+            </div>
         </div>
     )
 };
